@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace DigistoreApi\Digistore;
 
-use Exception;
 /**
  * Digistore24 REST Api Connector
  * @author Christian Neise
@@ -14,12 +13,12 @@ use Exception;
  * This connector is compatible with future version of the Digistore24 api.
  * Even if the Digistore24 api is extended, you still can use this connector.
  *
- * © 2021 Digistore24 GmbH, alle Rechte vorbehalten
+ * © 2022 Digistore24 GmbH, alle Rechte vorbehalten
  */
 
 /*
 
-Copyright (c) 2021 
+Copyright (c) 2022 
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
 associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -37,8 +36,6 @@ WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN 
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-if (!class_exists( 'DigistoreApi' )) {
-
 define( 'DS_ERR_UNKNOWN',                  0 );
 define( 'DS_ERR_NOT_CONNECTED',            1 );
 define( 'DS_ERR_BAD_API_KEY',              2 );
@@ -50,15 +47,11 @@ define( 'DS_ERR_BAD_HTTP_CODE',            7 );
 define( 'DS_ERR_PERMISSION_DENIED',        8 );
 define( 'DS_ERR_BAD_API_CALL',             9 );
 
-
 define( 'DS_LOG_INFO',  'info' );
 define( 'DS_LOG_ERROR', 'error' );
 
 define( 'DS_API_WRITABLE', 'writable' );
 define( 'DS_API_READONLY', 'readonly' );
-
-class DigistoreApiException extends Exception {
-}
 
 class DigistoreApi {
 
@@ -186,6 +179,12 @@ class DigistoreApi {
     private $base_url = 'https://www.digistore24.com';
     private $last_url    = false;
     private $last_params = false;
+
+
+    private function __construct( $api_key )
+    {
+        $this->api_key  = $api_key;
+    }
 
     private function _log( $level, $msg, $arg1='', $arg2='', $arg3='' )
     {
@@ -431,9 +430,5 @@ class DigistoreApi {
             $one_name = $key . '[' . $one_key . ']';
             $this->_set_post_param( $args, $one_name, $one_value );
         }
-
     }
-
 }
-
-} // if class_exists
