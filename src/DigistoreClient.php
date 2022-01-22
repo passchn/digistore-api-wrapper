@@ -4,6 +4,7 @@ namespace DigistoreApi;
 
 use DigistoreApi\Digistore\DigistoreApi;
 use DigistoreApi\Digistore\DigistoreApiException;
+use DigistoreApi\Purchases\PurchasesCollection;
 use Nette\Utils\Arrays;
 
 class DigistoreClient
@@ -11,9 +12,24 @@ class DigistoreClient
     private DigistoreApi $api;
     private array $errors = [];
 
+    public PurchasesCollection $Purchases;
+
     public function __construct(string $api_key)
     {
         $this->api = DigistoreApi::connect($api_key);
+        $this->Purchases = new PurchasesCollection($this);
+    }
+
+    public function call(string $method, $arguments)
+    {
+        try {
+            $response = $this->api->$method($arguments);
+        } catch (DigistoreApiException $e) {
+            $this->errors[] = $e;
+            return false;
+        }
+
+        return $response;
     }
 
     public function isConnected()
