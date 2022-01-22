@@ -4,5 +4,6 @@ namespace DigistoreApi\Digistore;
 
 use Exception;
 
-class DigistoreApiException extends Exception {
+class DigistoreApiException extends Exception
+{
 }
