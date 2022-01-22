@@ -1,11 +1,8 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Model\Digistore;
+namespace DigistoreApi\Digistore;
 
-use Cake\Core\Configure;
-use Cake\Core\Configure\Engine\IniConfig;
-use Composer\Config;
 use Exception;
 /**
  * Digistore24 REST Api Connector
@@ -66,11 +63,6 @@ class DigistoreApiException extends Exception {
 class DigistoreApi {
 
     const digistore_api_connector_version = 1.1;
-
-    public function __construct()
-    {
-        $this->api_key  = Configure::read('API.Digistore.key');
-    }
 
     /**
     * Initiates a connection to the Digistore24 api server. Note that no http call to the server is done. To actually test the connection,

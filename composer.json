@@ -4,11 +4,12 @@
     "type": "cakephp-plugin",
     "license": "MIT",
     "require": {
-        "php": ">=7.4"
+        "php": ">=7.4",
+        "ext-curl": "*"
     },
     "autoload": {
         "psr-4": {
-            "DigistoreApiWrapper\\": "src/"
+            "DigistoreApi\\": "src/"
         }
     }
 }
