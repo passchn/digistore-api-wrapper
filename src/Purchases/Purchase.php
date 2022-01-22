@@ -11,4 +11,12 @@ class Purchase extends Entity
 {
     private string $id;
     private float $amount;
+    private \stdClass $data;
+
+    public function __construct(\stdClass $data)
+    {
+        $this->data = $data;
+        $this->id = $data->id;
+        $this->amount = $data->amount;
+    }
 }
