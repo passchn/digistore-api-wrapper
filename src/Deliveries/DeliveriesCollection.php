@@ -13,6 +13,7 @@ class DeliveriesCollection extends Collection
     {
         $response = $this->listEntities(self::LIST, $options);
         if (!$response || empty($response->delivery)) {
+
             return null;
         }
 
@@ -21,7 +22,7 @@ class DeliveriesCollection extends Collection
 
             $delivery = new Delivery($data);
             if (empty($config['skip_purchases'])) {
-                $delivery->purchase = $this->client->Purchases->get($delivery->purchase_id);
+                $delivery->purchase = $delivery->purchase_id ? $this->client->Purchases->get($delivery->purchase_id) : null;
             }
 
             $deliveries[] = $delivery;
@@ -66,7 +67,11 @@ class DeliveriesCollection extends Collection
             }
         }
 
-        $date_from = DateTime::from($start_date);
+        try {
+            $date_from = DateTime::from($start_date);
+        } catch (\Exception $e) {
+            throw new \Exception("The value for \$start_date is invalid. Error: {$e->getMessage()}.");
+        }
 
         return $this->list([
             'from' => $date_from->format("Y-m-d"),
