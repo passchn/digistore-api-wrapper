@@ -9,7 +9,7 @@ class DeliveriesCollection extends Collection
 {
     const LIST = "listDeliveries";
 
-    public function list(?array $options = null): ?array
+    public function list(?array $options = null, ?array $config = null): ?array
     {
         $response = $this->listEntities(self::LIST, $options);
         if (!$response || empty($response->delivery)) {
@@ -20,7 +20,9 @@ class DeliveriesCollection extends Collection
         foreach ($response->delivery as $data) {
 
             $delivery = new Delivery($data);
-            $delivery->purchase = $this->client->Purchases->get($delivery->purchase_id);
+            if (empty($config['skip_purchases'])) {
+                $delivery->purchase = $this->client->Purchases->get($delivery->purchase_id);
+            }
 
             $deliveries[] = $delivery;
         }
@@ -36,7 +38,7 @@ class DeliveriesCollection extends Collection
     /**
      * List Deliveries for a time range, defaults to the last 6 weeks.
      */
-    public function listForTimeRange(string $start="-6 weeks", string $end="now"): ?array
+    public function listForTimeRange(string $start = "-6 weeks", string $end = "now"): ?array
     {
         try {
             $date_from = DateTime::from($start);
@@ -55,7 +57,7 @@ class DeliveriesCollection extends Collection
      * List Deliveries by Type, defaults to the last 6 weeks.
      * e.g.: listByTypes(DeliveryTypes::REQUEST, DeliveryType::IN_PROGRESS)
      */
-    public function listByTypes(array $types, string $start_date="-6 weeks"): ?array
+    public function listByTypes(array $types, string $start_date = "-6 weeks"): ?array
     {
         foreach ($types as $type) {
             if (!in_array($type, DeliveryTypes::getList())) {
@@ -76,9 +78,9 @@ class DeliveriesCollection extends Collection
     /**
      * Deliveries that are not yet processed
      */
-    public function listOpen(): ?array
+    public function listOpen(?array $config = null): ?array
     {
-        return $this->list(['is_processed' => false]);
+        return $this->list(['is_processed' => false], $config);
     }
 
     /**
@@ -87,7 +89,9 @@ class DeliveriesCollection extends Collection
      */
     public function countOpen(): ?int
     {
-        $open = $this->listOpen();
+        $open = $this->listOpen([
+            'skip_purchases' => true,
+        ]);
 
         return is_array($open) ? count($open) : null;
     }
