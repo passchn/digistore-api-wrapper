@@ -3,7 +3,7 @@
 namespace DigistoreApi;
 
 use DigistoreApi\Buyers\BuyersCollection;
-use DigistoreApi\Deliveries\DeliveryCollection;
+use DigistoreApi\Deliveries\DeliveriesCollection;
 use DigistoreApi\Digistore\DigistoreApi;
 use DigistoreApi\Digistore\DigistoreApiException;
 use DigistoreApi\Purchases\PurchasesCollection;
@@ -16,14 +16,14 @@ class DigistoreClient
 
     public PurchasesCollection $Purchases;
     public BuyersCollection $Buyers;
-    public DeliveryCollection $Deliveries;
+    public DeliveriesCollection $Deliveries;
 
     public function __construct(string $api_key)
     {
         $this->api = DigistoreApi::connect($api_key);
         $this->Purchases = new PurchasesCollection($this);
         $this->Buyers = new BuyersCollection($this);
-        $this->Deliveries = new DeliveryCollection($this);
+        $this->Deliveries = new DeliveriesCollection($this);
     }
 
     public function isConnected(): bool

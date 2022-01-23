@@ -3,6 +3,7 @@
 namespace DigistoreApi\Deliveries;
 
 use DigistoreApi\Collection;
+use Nette\Utils\DateTime;
 
 class DeliveriesCollection extends Collection
 {
@@ -13,6 +14,29 @@ class DeliveriesCollection extends Collection
         $response = $this->listEntities(self::LIST, $options);
 
         return $response ? $response->delivery : null;
+    }
+
+    public function listForPurchase(string $purchase_id): ?array
+    {
+        return $this->list(['purchase_id' => $purchase_id]);
+    }
+
+    /**
+     * List Deliveries for a time range, defaults to the last 6 weeks.
+     */
+    public function listForTimeRange(string $start="-6 weeks", string $end="now"): ?array
+    {
+        try {
+            $date_from = DateTime::from($start);
+            $date_until = DateTime::from($end);
+        } catch (\Exception $e) {
+            throw new \Exception("The values for either \$start or \$end are invalid. Error: {$e->getMessage()}.");
+        }
+
+        return $this->list([
+            'from' => $date_from->format("Y-m-d"),
+            'to' => $date_until->format("Y-m-d"),
+        ]);
     }
 
     /**
@@ -29,7 +53,7 @@ class DeliveriesCollection extends Collection
      */
     public function countOpen(): ?int
     {
-        $open = count($this->listOpen());
+        $open = $this->listOpen();
 
         return is_array($open) ? count($open) : null;
     }
