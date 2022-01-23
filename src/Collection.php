@@ -2,10 +2,9 @@
 
 namespace DigistoreApi;
 
-use DigistoreApi\Purchases\Purchase;
 use Nette\Utils\Arrays;
 
-class Collection
+abstract class Collection
 {
     protected DigistoreClient $client;
 
@@ -39,7 +38,7 @@ class Collection
         return $response;
     }
 
-    protected function listEntities(string $action, ?array $arguments)
+    protected function listEntities(string $action, ?array $arguments=null)
     {
         return $this->client->call($action, $arguments);
     }

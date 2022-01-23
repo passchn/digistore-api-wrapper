@@ -7,7 +7,7 @@ use Nette\SmartObject;
 /**
  * @link https://doc.nette.org/en/utils/smartobject
  */
-class Entity
+abstract class Entity
 {
     use SmartObject;
 }
