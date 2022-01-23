@@ -4,6 +4,7 @@ namespace DigistoreApi\Buyers;
 
 use DigistoreApi\Collection;
 use DigistoreApi\Purchases\PurchasesCollection;
+use Nette\Utils\Arrays;
 use Nette\Utils\DateTime;
 use Nette\Utils\Validators;
 
@@ -13,16 +14,39 @@ class BuyersCollection extends Collection
     const LIST = "listBuyers";
 
     /**
-     * Find a single Purchase by order id / purchase id.
+     * Find a single Buyer by id or email.
      */
-    public function get(string $id): ?Buyer
+    public function get(string $search): ?Buyer
     {
-        $response = $this->getEntity(self::GET, $id);
+        if (Validators::isEmail($search)) {
+
+            return $this->getByEmail($search);
+        }
+
+        $response = $this->getEntity(self::GET, $search);
 
         return $response ? new Buyer($response->buyer) : null;
     }
 
-    public function getByEmail(string $email, string $date_from='-5 years'): ?Buyer
+    public function getMany(array $terms): ?array
+    {
+        if (!Arrays::isList($terms)) {
+            return null;
+        }
+
+        $buyers = [];
+        foreach ($terms as $term) {
+
+            $buyer = $this->get($term);
+            if ($buyer) {
+                $buyers[] = $buyer;
+            }
+        }
+
+        return count($buyers) ? $buyers : null;
+    }
+
+    private function getByEmail(string $email, string $date_from='-5 years'): ?Buyer
     {
         if (!Validators::isEmail($email)) {
             return null;

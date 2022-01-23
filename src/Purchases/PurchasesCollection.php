@@ -3,7 +3,6 @@
 namespace DigistoreApi\Purchases;
 
 use DigistoreApi\Collection;
-use Nette\Utils\Arrays;
 
 class PurchasesCollection extends Collection
 {
