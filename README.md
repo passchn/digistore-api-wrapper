@@ -10,9 +10,9 @@ The recommended way to install composer packages is:
 composer require passchn/digistore-api-wrapper
 ```
 
-## Connect to the API 
+## Connect to the API
 
-To connect to the Api, create an instance of `DigistoreClient`, passing your api key from Digistore24.com:  
+To connect to the Api, create an instance of `DigistoreClient`, passing your api key from Digistore24.com:
 
 ```
 use DigistoreApi\DigistoreClient;
@@ -20,39 +20,47 @@ use DigistoreApi\DigistoreClient;
 $api = new DigistoreClient($api_key);
 ```
 
-Test the connection: 
+Test the connection:
+
 ```
 return $api->isConnected() // true or false 
 ```
 
-If `false`, or some API-call went wrong, and you got a `null`-response, check for the last error message, or all errors that have occurred: 
+If `false`, or some API-call went wrong, and you got a `null`-response, check for the last error message, or all errors
+that have occurred:
+
 ```
 $api->getLastError() // error message (string) or null
 $api->getErrors() // array of Exceptions or null 
 ```
 
-## Get data from the API 
+## Get data from the API
 
-This plugin is a wrapper for thr original Digistore24 API. See the full reference here: [dev.digistore24.com](https://dev.digistore24.com/en/articles/3-api-basics). 
+This plugin is a wrapper for thr original Digistore24 API. See the full reference
+here: [dev.digistore24.com](https://dev.digistore24.com/en/articles/3-api-basics).
 
-The aim is to have known return types (e.g., `Buyer` or `Purchase` with defined fields), and to provide an easier access. 
+The aim is to have known return types (e.g., `Buyer` or `Purchase` with defined fields), and to provide an easier
+access.
 
-However, ust a few of the possible queries are supported right now. In general, you can always use this method to call any endpoint: 
+However, ust a few of the possible queries are supported right now. In general, you can always use this method to call
+any endpoint:
+
  ```
  $api->call($method, ...$arguments)
  ```
 
-## Supported wrapper-endpoints 
+## Supported wrapper-endpoints
 
-### Purchases 
+### Purchases
 
-Get one `DigistoreApi\Purchases\Purchase` or `null` by order id / purchase id: 
+Get one `DigistoreApi\Purchases\Purchase` or `null` by order id / purchase id:
+
 ```
 $api->Purchases->get($id);
 ```
 
+Get a `DigistoreApi\Purchases\Purchase[]` or `null` by passing an array of order ids:
 
-Get a `DigistoreApi\Purchases\Purchase[]` or `null` by passing an array of order ids: 
 ```
 $api->Purchases->getMany([
     '12345',
@@ -63,13 +71,45 @@ $api->Purchases->getMany([
 
 ### Buyers
 
-Get a `DigistoreApi\Buyers\Buyer` (or `null`) by id or email. 
+Get a `DigistoreApi\Buyers\Buyer` (or `null`) by id or email.
+
 ```
 $api->Buyers->get($id_or_email);
 ```
-Get an array of `Buyers` or `null` by passing a list of emails or ids: 
+
+Get an array of `Buyers` or `null` by passing a list of emails or ids:
+
 ```
 $api->Buyers->getMany([$id_or_email, $other_email, $some_id]);
+```
+
+### Deliveries
+
+Count Deliveries that have not been processed yet.
+
+```
+$deliveries = $api->Deliveries->countOpen() // ?int
+```
+
+Find Deliveries by purchase id / order id:
+
+```
+$deliveries = $api->Deliveries->listForPurchase("ABC123") // ?array
+```
+
+Find Deliveries for a certain time range (defaults to last 6 weeks):
+
+```
+$deliveries = $api->Deliveries->listForTimeRange() // ?array
+```
+
+Find Deliveries by type/state, e.g. request (not processed yet), delivery (sent by you), or cancelled.
+
+```
+$deliveries = $api->Deliveries->listByTypes([
+    DeliveryTypes::REQUEST,
+    DeliveryTypes::DELIVERY,
+]) // ?array 
 ```
 
 ## Contribution
