@@ -12,13 +12,13 @@ class DeliveriesCollection extends Collection
     public function list(?array $options = null, ?array $config = null): ?array
     {
         $response = $this->listEntities(self::LIST, $options);
-        if (!$response || empty($response->delivery)) {
+        if (!$response) {
 
             return null;
         }
 
         $deliveries = [];
-        foreach ($response->delivery as $data) {
+        foreach ($response->delivery ?? [] as $data) {
 
             $delivery = new Delivery($data);
             if (empty($config['skip_purchases'])) {
