@@ -40,6 +40,24 @@ class DeliveriesCollection extends Collection
     }
 
     /**
+     * List Deliveries by Type,
+     * e.g.: listByTypes(DeliveryTypes::REQUEST, DeliveryType::IN_PROGRESS)
+     */
+    public function listByTypes(...$types): ?array
+    {
+        foreach ($types as $type) {
+            if (!in_array($type, DeliveryTypes::getList())) {
+
+                throw new \Exception("Invalid DeliveryType: $type. ");
+            }
+        }
+
+        return $this->list([
+            'type' => implode(',', $types),
+        ]);
+    }
+
+    /**
      * Deliveries that are not yet processed
      */
     public function listOpen(): ?array
