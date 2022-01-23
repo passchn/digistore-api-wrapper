@@ -40,10 +40,10 @@ class DeliveriesCollection extends Collection
     }
 
     /**
-     * List Deliveries by Type,
+     * List Deliveries by Type, defaults to the last 6 weeks.
      * e.g.: listByTypes(DeliveryTypes::REQUEST, DeliveryType::IN_PROGRESS)
      */
-    public function listByTypes(...$types): ?array
+    public function listByTypes(array $types, string $start_date="-6 weeks"): ?array
     {
         foreach ($types as $type) {
             if (!in_array($type, DeliveryTypes::getList())) {
@@ -52,7 +52,11 @@ class DeliveriesCollection extends Collection
             }
         }
 
+        $date_from = DateTime::from($start_date);
+
         return $this->list([
+            'from' => $date_from->format("Y-m-d"),
+            'to' => "now",
             'type' => implode(',', $types),
         ]);
     }
