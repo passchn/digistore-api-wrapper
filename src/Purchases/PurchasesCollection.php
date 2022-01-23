@@ -7,14 +7,15 @@ use Nette\Utils\Arrays;
 
 class PurchasesCollection extends Collection
 {
-    const GET_PURCHASE = "getPurchase";
+    const GET = "getPurchase";
+    const LIST = "listPurchases";
 
     /**
      * Find a single Purchase by order id / purchase id.
      */
-    public function find(string $id): ?Purchase
+    public function get(string $id): ?Purchase
     {
-        $response = $this->findEntity(self::GET_PURCHASE, $id);
+        $response = $this->getEntity(self::GET, $id);
 
         if (!$response) {
             return null;
@@ -26,9 +27,9 @@ class PurchasesCollection extends Collection
     /**
      * Pass a list of purchase_ids to get multiple Purchases.
      */
-    public function findMany(array $ids): ?array
+    public function getMany(array $ids): ?array
     {
-        $response = $this->findManyEntities(self::GET_PURCHASE, $ids);
+        $response = $this->getManyEntities(self::GET, $ids);
         if (!$response) {
 
             return null;

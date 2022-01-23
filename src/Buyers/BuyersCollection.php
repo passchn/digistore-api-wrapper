@@ -3,38 +3,30 @@
 namespace DigistoreApi\Buyers;
 
 use DigistoreApi\Collection;
-use DigistoreApi\Purchases\Purchase;
+use DigistoreApi\Purchases\PurchasesCollection;
 
 class BuyersCollection extends Collection
 {
-    const GET_BUYER = "getBuyer";
+    const GET = "getBuyer";
+    const LIST = "listBuyers";
 
     /**
      * Find a single Purchase by order id / purchase id.
      */
-    public function find(string $id): ?Buyer
+    public function get(string $id): ?Buyer
     {
-        $response = $this->findEntity(self::GET_BUYER, $id);
+        $response = $this->getEntity(self::GET, $id);
 
-        return $response ? new Buyer($response) : null;
+        return $response ? new Buyer($response->buyer) : null;
     }
 
-    /**
-     * Pass a list of purchase_ids to get multiple Purchases.
-     */
-    public function findMany(array $ids): ?array
+    public function findByEmail(string $email): ?Buyer
     {
-        $response = $this->findManyEntities(self::GET_BUYER, $ids);
-        if (!$response) {
-
+        $purchases = $this->listEntities(PurchasesCollection::LIST, ['email' => $email]);
+        if (!$purchases) {
             return null;
         }
 
-        return array_map(
-            function ($data) {
-                return new Buyer($data);
-            },
-            $response
-        );
+        return $purchases;
     }
 }

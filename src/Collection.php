@@ -14,18 +14,12 @@ class Collection
         $this->client = $client;
     }
 
-    protected function findEntity(string $action, string $id)
+    protected function getEntity(string $action, string $id)
     {
-        $response = $this->client->call($action, $id);
-
-        if (!$response) {
-            return null;
-        }
-
-        return $response;
+        return $this->client->call($action, $id);
     }
 
-    protected function findManyEntities(string $action, array $ids)
+    protected function getManyEntities(string $action, array $ids)
     {
         if (!Arrays::isList($ids)) {
             throw new \Exception("\$purchase_ids must be a list, i.e., an array without keys. ");
@@ -43,5 +37,10 @@ class Collection
         }
 
         return $response;
+    }
+
+    protected function listEntities(string $action, ?array $arguments)
+    {
+        return $this->client->call($action, $arguments);
     }
 }
