@@ -41,10 +41,10 @@ class DigistoreClient
         return $this->call("getUserInfo");
     }
 
-    public function call(string $method, $arguments=null)
+    public function call(string $method, ...$arguments)
     {
         try {
-            $response = $this->api->$method($arguments);
+            $response = $this->api->$method(...$arguments);
         } catch (DigistoreApiException $e) {
             $this->errors[] = $e;
             return null;
@@ -66,5 +66,10 @@ class DigistoreClient
         $exception = Arrays::last($this->errors);
 
         return $exception ? $exception->getMessage() : null;
+    }
+
+    public function registerError(\Exception $e)
+    {
+        $this->errors[] = $e;
     }
 }

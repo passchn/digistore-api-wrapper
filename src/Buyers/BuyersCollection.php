@@ -4,6 +4,7 @@ namespace DigistoreApi\Buyers;
 
 use DigistoreApi\Collection;
 use DigistoreApi\Purchases\PurchasesCollection;
+use Nette\Utils\DateTime;
 
 class BuyersCollection extends Collection
 {
@@ -20,13 +21,17 @@ class BuyersCollection extends Collection
         return $response ? new Buyer($response->buyer) : null;
     }
 
-    public function findByEmail(string $email): ?Buyer
+    public function findByEmail(string $email, string $date_from='-1 year'): ?Buyer
     {
-        $purchases = $this->listEntities(PurchasesCollection::LIST, ['email' => $email]);
-        if (!$purchases) {
+        try {
+            $date = DateTime::from($date_from);
+            $purchases = $this->client->call(PurchasesCollection::LIST, $date->format('Y-m-d H:i:s'), 'now', ['email' => $email]);
+            $buyer = new Buyer(current($purchases->purchase_list)->buyer);
+        } catch (\Exception $e) {
+            $this->client->registerError($e);
             return null;
         }
 
-        return $purchases;
+        return $buyer;
     }
 }
