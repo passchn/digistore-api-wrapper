@@ -14,7 +14,7 @@ class PurchasesCollection extends Collection
      */
     public function find(string $id): ?Purchase
     {
-        $response = $this->client->call(self::GET_PURCHASE, $id);
+        $response = $this->findEntity(self::GET_PURCHASE, $id);
 
         if (!$response) {
             return null;
@@ -28,19 +28,10 @@ class PurchasesCollection extends Collection
      */
     public function findMany(array $ids): ?array
     {
-        if (!Arrays::isList($ids)) {
-            throw new \Exception("\$purchase_ids must be a list, i.e., an array without keys. ");
-        }
-
-        $ids = implode(',', $ids);
-        $response = $this->client->call(self::GET_PURCHASE, $ids);
-
+        $response = $this->findManyEntities(self::GET_PURCHASE, $ids);
         if (!$response) {
-            return null;
-        }
 
-        if (!is_array($response)) {
-            $response = [$response];
+            return null;
         }
 
         return array_map(

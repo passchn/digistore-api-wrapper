@@ -2,6 +2,7 @@
 
 namespace DigistoreApi;
 
+use DigistoreApi\Buyers\BuyersCollection;
 use DigistoreApi\Digistore\DigistoreApi;
 use DigistoreApi\Digistore\DigistoreApiException;
 use DigistoreApi\Purchases\PurchasesCollection;
@@ -13,23 +14,13 @@ class DigistoreClient
     private array $errors = [];
 
     public PurchasesCollection $Purchases;
+    public BuyersCollection $Buyers;
 
     public function __construct(string $api_key)
     {
         $this->api = DigistoreApi::connect($api_key);
         $this->Purchases = new PurchasesCollection($this);
-    }
-
-    public function call(string $method, $arguments)
-    {
-        try {
-            $response = $this->api->$method($arguments);
-        } catch (DigistoreApiException $e) {
-            $this->errors[] = $e;
-            return false;
-        }
-
-        return $response;
+        $this->Buyers = new BuyersCollection($this);
     }
 
     public function isConnected()
@@ -43,6 +34,23 @@ class DigistoreClient
         }
 
         return true;
+    }
+
+    public function whoAmI(): ?\stdClass
+    {
+        return $this->call("getUserInfo");
+    }
+
+    public function call(string $method, $arguments=null)
+    {
+        try {
+            $response = $this->api->$method($arguments);
+        } catch (DigistoreApiException $e) {
+            $this->errors[] = $e;
+            return null;
+        }
+
+        return $response;
     }
 
     public function getErrors(): array
