@@ -12,8 +12,20 @@ class DeliveriesCollection extends Collection
     public function list(?array $options = null): ?array
     {
         $response = $this->listEntities(self::LIST, $options);
+        if (!$response || empty($response->delivery)) {
+            return null;
+        }
 
-        return $response ? $response->delivery : null;
+        $deliveries = [];
+        foreach ($response->delivery as $data) {
+
+            $delivery = new Delivery($data);
+            $delivery->purchase = $this->client->Purchases->get($delivery->purchase_id);
+
+            $deliveries[] = $delivery;
+        }
+
+        return $deliveries;
     }
 
     public function listForPurchase(string $purchase_id): ?array
