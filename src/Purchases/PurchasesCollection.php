@@ -35,8 +35,12 @@ class PurchasesCollection extends Collection
         $ids = implode(',', $ids);
         $response = $this->client->call(self::GET_PURCHASE, $ids);
 
-        if (!$response || !is_array($response)) {
+        if (!$response) {
             return null;
+        }
+
+        if (!is_array($response)) {
+            $response = [$response];
         }
 
         return array_map(
