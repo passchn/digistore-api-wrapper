@@ -2,7 +2,7 @@
 
 Files in the `src/Digistore/*` folder, or the `\DigistoreApi\Digistore` namespace, are taken from Digistore24: [dev.digistore24.com/en/articles/3-api-basics](https://dev.digistore24.com/en/articles/3-api-basics)
 
-See the license information in `Digistore24.php` for more information. 
+See the license information in `DigistoreApi.php` for more information. 
 
 Changes, that were made to the original PHP class: 
 * the `DigistoreApiException` was moved to an own file. 

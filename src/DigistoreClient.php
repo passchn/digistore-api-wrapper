@@ -23,7 +23,7 @@ class DigistoreClient
         $this->Buyers = new BuyersCollection($this);
     }
 
-    public function isConnected()
+    public function isConnected(): bool
     {
         try {
             $this->api->ping();
