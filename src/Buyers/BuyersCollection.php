@@ -22,7 +22,7 @@ class BuyersCollection extends Collection
         return $response ? new Buyer($response->buyer) : null;
     }
 
-    public function findByEmail(string $email, string $date_from='-1 year'): ?Buyer
+    public function getByEmail(string $email, string $date_from='-5 years'): ?Buyer
     {
         if (!Validators::isEmail($email)) {
             return null;
