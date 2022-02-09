@@ -6,6 +6,7 @@ use DigistoreApi\Buyers\BuyersCollection;
 use DigistoreApi\Deliveries\DeliveriesCollection;
 use DigistoreApi\Digistore\DigistoreApi;
 use DigistoreApi\Digistore\DigistoreApiException;
+use DigistoreApi\Products\ProductsCollection;
 use DigistoreApi\Purchases\PurchasesCollection;
 use Nette\Utils\Arrays;
 
@@ -17,6 +18,7 @@ class DigistoreClient
     public PurchasesCollection $Purchases;
     public BuyersCollection $Buyers;
     public DeliveriesCollection $Deliveries;
+    public ProductsCollection $Products;
 
     public function __construct(string $api_key)
     {
@@ -24,6 +26,7 @@ class DigistoreClient
         $this->Purchases = new PurchasesCollection($this);
         $this->Buyers = new BuyersCollection($this);
         $this->Deliveries = new DeliveriesCollection($this);
+        $this->Products = new ProductsCollection($this);
     }
 
     public function isConnected(): bool
