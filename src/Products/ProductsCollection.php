@@ -12,17 +12,15 @@ class ProductsCollection extends Collection
      * @return Product[]
      * @link https://dev.digistore24.com/en/articles/80-listproducts
      */
-    public function list(string $sort_field = "name"): array
+    public function list(): array
     {
-        $response = $this->listEntities(self::LIST, [
-            'sort_by' => $sort_field,
-        ]);
+        $response = $this->listEntities(self::LIST);
 
         return array_map(
             function ($product_data) {
                 return new Product($product_data);
             },
-            $response ?? []
+            $response->products ?? []
         );
     }
 }
