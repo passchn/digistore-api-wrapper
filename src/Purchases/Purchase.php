@@ -42,7 +42,7 @@ class Purchase extends Entity
     public ?string $details_url;
 
     public ?Buyer $buyer;
-    public ?array $transactions;
+    public ?Transaction $last_payment;
 
     public function __construct(\stdClass $data)
     {
@@ -77,11 +77,7 @@ class Purchase extends Entity
 
         $this->buyer = new Buyer($data->buyer);
 
-        $this->transactions = array_map(
-            function ($transaction_data) {
-                return new Transaction($transaction_data);
-            },
-            $data->last_payment
-        );
+
+        $this->last_payment = new Transaction($data->last_payment);
     }
 }
