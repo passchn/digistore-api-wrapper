@@ -4,6 +4,7 @@ namespace DigistoreApi\Purchases;
 
 use DigistoreApi\Buyers\Buyer;
 use DigistoreApi\Entity;
+use DigistoreApi\PurchaseItems\PurchaseItem;
 use DigistoreApi\Transactions\Transaction;
 use Nette\Utils\DateTime;
 
@@ -43,6 +44,7 @@ class Purchase extends Entity
 
     public ?Buyer $buyer;
     public ?Transaction $last_payment;
+    public array $items;
 
     public function __construct(\stdClass $data)
     {
@@ -76,8 +78,12 @@ class Purchase extends Entity
         $this->details_url = $data->details_url ?? null;
 
         $this->buyer = new Buyer($data->buyer);
-
-
         $this->last_payment = new Transaction($data->last_payment);
+        $this->items = array_map(
+            function ($item_data) {
+                return new PurchaseItem($item_data);
+            },
+            $data->items ?? []
+        );
     }
 }
