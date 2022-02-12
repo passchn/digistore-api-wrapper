@@ -26,6 +26,7 @@ class Purchase extends Entity
     public ?DateTime $created_at;
 
     public ?string $voucher_code;
+    public ?string $custom;
 
     public ?string $delivery_types;
     public ?string $delivery_types_msg;
@@ -61,6 +62,7 @@ class Purchase extends Entity
         $this->created_at = $data->created_at ? DateTime::from($data->created_at) : null;
 
         $this->voucher_code = $data->voucher_code ?? null;
+        $this->custom = $data->custom ?? null;
 
         $this->delivery_types = $data->delivery_types;
         $this->delivery_types_msg = $data->delivery_types_msg;
