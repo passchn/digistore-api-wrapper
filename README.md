@@ -1,5 +1,9 @@
 # Digistore24 Api Wrapper plugin for PHP
 
+## No further development 
+
+I'm not using Digistore24 anymore myself. So it is very unlikely that I will further develop this package. 
+
 ## Installation
 
 You can install this plugin using [composer](https://getcomposer.org).
